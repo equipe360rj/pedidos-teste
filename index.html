@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karaokê - Pedir Música</title>
+    <style>
+        :root { --primary: #e91e63; --bg: #0f0f0f; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: white; padding: 20px; max-width: 500px; margin: auto; }
+        .box { background: #1a1a1a; padding: 25px; border-radius: 20px; border: 1px solid #333; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 10px; }
+        button:disabled { background: #444; cursor: not-allowed; }
+        #resultados { background: #222; border-radius: 10px; max-height: 250px; overflow-y: auto; margin-top: -5px; border: 1px solid #333; display: none; }
+        .item { padding: 12px; border-bottom: 1px solid #333; cursor: pointer; font-size: 14px; color: #ddd; }
+        .item:hover { background: #333; color: white; }
+        .sucesso { color: #4caf50; text-align: center; margin-top: 15px; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2 style="text-align: center; color: var(--primary);">🎤 Fila de Espera</h2>
+        
+        <label>Seu Nome:</label>
+        <input type="text" id="cantor" placeholder="Digite seu nome...">
+
+        <label>Qual música quer cantar?</label>
+        <input type="text" id="busca" placeholder="Busque por artista ou música..." oninput="filtrar()">
+        <div id="resultados"></div>
+
+        <p id="escolhida" style="margin: 15px 0; font-style: italic; color: #e91e63; font-size: 0.9em;"></p>
+        
+        <button id="btn" onclick="enviar()" disabled>ENVIAR PEDIDO</button>
+        <div id="msg" class="sucesso">✅ Pedido enviado!</div>
+    </div>
+
+    <script>
+        let musicas = [];
+        let musicaSelecionada = "";
+        const urlAPI = https://script.google.com/macros/s/AKfycbzlc_RB5pzAFN7nHjZtUw4u6J6hnGBn9mF1huRWC_hIjbOiS2Pom4WQVdTNG4zoXeGU/exec
+
+        // Carrega o JSON de strings
+        fetch('dados.json')
+            .then(res => res.json())
+            .then(data => { musicas = data; });
+
+        function filtrar() {
+            const termo = document.getElementById('busca').value.toLowerCase();
+            const lista = document.getElementById('resultados');
+            lista.innerHTML = '';
+            
+            if (termo.length < 3) {
+                lista.style.display = 'none';
+                return;
+            }
+
+            const filtradas = musicas.filter(m => m.toLowerCase().includes(termo)).slice(0, 15);
+
+            if (filtradas.length > 0) {
+                lista.style.display = 'block';
+                filtradas.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'item';
+                    div.innerText = m;
+                    div.onclick = () => {
+                        musicaSelecionada = m;
+                        document.getElementById('busca').value = m;
+                        document.getElementById('escolhida').innerText = "Selecionada: " + m;
+                        lista.style.display = 'none';
+                        document.getElementById('btn').disabled = false;
+                    };
+                    lista.appendChild(div);
+                });
+            } else {
+                lista.style.display = 'none';
+            }
+        }
+
+        async function enviar() {
+            const nome = document.getElementById('cantor').value;
+            if (!nome) return alert("Por favor, digite seu nome!");
+
+            const btn = document.getElementById('btn');
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
+
+            try {
+                await fetch(urlAPI, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        musica: musicaSelecionada,
+                        cantor: nome
+                    })
+                });
+
+                document.getElementById('msg').style.display = 'block';
+                setTimeout(() => location.reload(), 2500);
+            } catch (e) {
+                alert("Erro ao enviar. Tente novamente.");
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
