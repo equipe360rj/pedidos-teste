@@ -1,1 +1,1 @@
-https://equipe360rj.github.io/pedidos/
+https://equipe360rj.github.io/pedidos-teste
