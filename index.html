@@ -290,7 +290,23 @@
         let baseDeDados = [];
         let musicaSelecionada = "";
         const urlAPI = 'https://script.google.com/macros/s/AKfycbzQPMrf8Y6OiSScHXSoU24mTA26K_8HxGpQA7w_UiAIFIIlxjeN8W53eTCF0l2UtL4l/exec';
+        const dataUpdate = '';
         let deferredPrompt;
+
+        // Display Version Footer
+        window.addEventListener('load', () => {
+            try {
+                const version = urlAPI.slice(-5);
+                const dateDisplay = dataUpdate || 'Original';
+                const footerHtml = `
+                    <div style="text-align: center; margin-top: 40px; font-size: 11px; color: rgba(255,255,255,0.3);">
+                        API: ...${version} <br> 
+                        Update: ${dateDisplay}
+                    </div>
+                `;
+                document.querySelector('.container').insertAdjacentHTML('beforeend', footerHtml);
+            } catch (e) { console.log(e); }
+        });
 
         // PWA Service Worker
         if ('serviceWorker' in navigator) {
@@ -488,6 +504,5 @@
     </script>
 
 </body>
-
 
 </html>
