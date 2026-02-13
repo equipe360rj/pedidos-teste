@@ -296,8 +296,11 @@
         // Display Version Footer
         window.addEventListener('load', () => {
             try {
-                const version = urlAPI.slice(-5);
-                const dateDisplay = dataUpdate || 'Original';
+                // Pega os 5 caracteres antes do /exec
+                const cleanUrl = urlAPI.replace('/exec', '');
+                const version = cleanUrl.slice(-5);
+                const dateDisplay = dataUpdate || '-';
+
                 const footerHtml = `
                     <div style="text-align: center; margin-top: 40px; font-size: 11px; color: rgba(255,255,255,0.3);">
                         API: ...${version} <br> 
