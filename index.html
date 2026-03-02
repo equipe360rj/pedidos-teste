@@ -290,7 +290,7 @@
         let baseDeDados = [];
         let musicaSelecionada = "";
         const urlAPI = 'https://script.google.com/macros/s/AKfycbzQPMrf8Y6OiSScHXSoU24mTA26K_8HxGpQA7w_UiAIFIIlxjeN8W53eTCF0l2UtL4l/exec';
-        const dataUpdate = '12/02/2026 21:43';
+        const dataUpdate = '12/02/2026 23:41';
         let deferredPrompt;
 
         // Display Version Footer
@@ -495,7 +495,7 @@
             const ultimoPedido = localStorage.getItem('ultimoPedido');
             if (ultimoPedido) {
                 const diff = new Date().getTime() - parseInt(ultimoPedido);
-                const cooldown = 1000; // 1 segundos
+                const cooldown = 5000; // 5 segundos
                 if (diff < cooldown) {
                     const segundosRestantes = Math.ceil((cooldown - diff) / 1000);
                     mostrarAlerta("AGUARDE...", `⏳ Por favor, aguarde ${segundosRestantes} segundos para fazer outro pedido.`);
@@ -527,6 +527,5 @@
     </script>
 
 </body>
-
 
 </html>
