@@ -495,7 +495,7 @@
             const ultimoPedido = localStorage.getItem('ultimoPedido');
             if (ultimoPedido) {
                 const diff = new Date().getTime() - parseInt(ultimoPedido);
-                const cooldown = 120000; // 120 segundos
+                const cooldown = 1000; // 1 segundos
                 if (diff < cooldown) {
                     const segundosRestantes = Math.ceil((cooldown - diff) / 1000);
                     mostrarAlerta("AGUARDE...", `⏳ Por favor, aguarde ${segundosRestantes} segundos para fazer outro pedido.`);
@@ -527,5 +527,6 @@
     </script>
 
 </body>
+
 
 </html>
